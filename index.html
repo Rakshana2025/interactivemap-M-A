@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8" />
-  <title>Buyer & Seller M&A Map</title>
+  <title>M&A Interactive Map JAN 2026</title>
 
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css"/>
@@ -52,10 +52,30 @@
       color: white;
       text-align: center;
       line-height: 40px;
+
     }
+    #loadingNote {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 10px 12px;
+      border-radius: 6px;
+      font: 13px/1.4 Arial, Helvetica, sans-serif;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      max-width: 280px;
+    }
+
   </style>
 </head>
 <body>
+  <div id="loadingNote">
+    <strong>Loading live M&A market data…</strong><br>
+    Buyer and seller locations are fetched in real time via automation workflows.<br>
+    Please wait a few seconds for all points to appear.
+  </div>
+
   <div id="map"></div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -150,7 +170,7 @@
             item.location || null,
             item.type ? `Type: ${item.type}` : null,
             item.ownership ? `Ownership: ${item.ownership}` : null,
-            item.type_of_book ? `Type of a book looking for: ${item.type_of_book}` : null,
+            item.type_of_book ? `Type of book looking for: ${item.type_of_book}` : null,
             item.available_capital ? `Available capital to Invest: ${item.available_capital}` : null,
             item.target_book_size ? `Target Book size: ${item.target_book_size}` : null,
             item.asking_price ? `Asking Price: ${item.asking_price}` : null,
@@ -182,6 +202,13 @@
           return div;
         };
         legend.addTo(map);
+
+        const loadingNote = document.getElementById('loadingNote');
+        if (loadingNote) {
+          setTimeout(() => {
+            loadingNote.style.display = 'none';
+          }, 800);
+        }
 
         const filterControl = L.control({ position: 'topright' });
 filterControl.onAdd = function () {
@@ -239,4 +266,3 @@ filterControl.onAdd = function () {
   </script>
 </body>
 </html>
-
